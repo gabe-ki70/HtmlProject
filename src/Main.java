@@ -17,13 +17,18 @@ public class Main implements ActionListener {
     private JFrame mainFrame;
     private JPanel controlPanel;
     private JPanel controlPanel2;
+    private JPanel controlPanel3;
+    private JPanel linkoutputPanel;
     private JLabel statusLabel;
+    private JLabel separator1;
+    private JLabel separator2;
     private JMenuBar mb;
     private JMenu file, edit, help;
     private JMenuItem cut, copy, paste, selectAll;
     private JTextArea ta; //typing area
     private JTextArea linkinput;
     private JTextArea keywordinput;
+    private JTextArea linkoutput;
     private int WIDTH = 800;
     private int HEIGHT = 700;
 
@@ -42,16 +47,32 @@ public class Main implements ActionListener {
             mainFrame.setLayout(new GridLayout(1, 2));
             controlPanel = new JPanel();
             controlPanel2 = new JPanel();
+            controlPanel3 = new JPanel();
+            controlPanel3.setLayout(new GridLayout(5, 1));
+            linkoutputPanel = new JPanel();
+            separator1 = new JLabel("");
+            separator2 = new JLabel("");
+
+            JButton startbutton = new JButton("Start");
+            startbutton.setActionCommand("Start");
+            startbutton.addActionListener(new Main.ButtonClickListener());
+
             controlPanel.setLayout(new GridLayout(1, 1));
-            controlPanel2.setLayout(new GridLayout(2, 1));
+            controlPanel2.setLayout(new GridLayout(1, 1));
 
-
+            linkoutput = new JTextArea("Links with Keyword: ");
             linkinput = new JTextArea("Link: ");
             keywordinput = new JTextArea("Keyword: ");
-            mainFrame.add(controlPanel2);
-            mainFrame.add(controlPanel);
-            controlPanel2.add(linkinput);
+            controlPanel.add(linkinput);
             controlPanel2.add(keywordinput);
+            mainFrame.add(controlPanel3);
+            mainFrame.add(linkoutputPanel);
+            linkoutputPanel.add(linkoutput);
+            controlPanel3.add(controlPanel);
+            controlPanel3.add(separator1);
+            controlPanel3.add(controlPanel2);
+            controlPanel3.add(separator2);
+            controlPanel3.add(startbutton);
 
             mainFrame.setVisible(true);
             mainFrame.addWindowListener(new WindowAdapter() {
@@ -82,9 +103,10 @@ public class Main implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
 
-            if (command.equals("OK")) {
-                statusLabel.setText("Ok Button clicked.");
-            } else if (command.equals("Submit")) {
+            if (command.equals("Start")) {
+                System.out.println(keywordinput.getText());
+            }
+            else if (command.equals("Submit")) {
                 statusLabel.setText("Submit Button clicked.");
             }
             else {
