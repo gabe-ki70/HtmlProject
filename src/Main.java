@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+
 public class Main implements ActionListener {
 
     private JFrame mainFrame;
@@ -41,47 +42,48 @@ public class Main implements ActionListener {
         prepareGUI();
     }
 
-        private void prepareGUI () {
-            mainFrame = new JFrame("Gabe Learning SWING");
-            mainFrame.setSize(WIDTH, HEIGHT);
-            mainFrame.setLayout(new GridLayout(1, 2));
-            controlPanel = new JPanel();
-            controlPanel2 = new JPanel();
-            controlPanel3 = new JPanel();
-            controlPanel3.setLayout(new GridLayout(5, 1));
-            linkoutputPanel = new JPanel();
-            separator1 = new JLabel("");
-            separator2 = new JLabel("");
+    private void prepareGUI() {
+        mainFrame = new JFrame("Gabe Learning SWING");
+        mainFrame.setSize(WIDTH, HEIGHT);
+        mainFrame.setLayout(new GridLayout(1, 2));
+        controlPanel = new JPanel();
+        controlPanel2 = new JPanel();
+        controlPanel3 = new JPanel();
+        controlPanel3.setLayout(new GridLayout(5, 1));
+        linkoutputPanel = new JPanel();
+        separator1 = new JLabel("");
+        separator2 = new JLabel("");
 
-            JButton startbutton = new JButton("Start");
-            startbutton.setActionCommand("Start");
-            startbutton.addActionListener(new Main.ButtonClickListener());
+        JButton startbutton = new JButton("Start");
+        startbutton.setActionCommand("Start");
+        startbutton.addActionListener(new Main.ButtonClickListener());
 
-            controlPanel.setLayout(new GridLayout(1, 1));
-            controlPanel2.setLayout(new GridLayout(1, 1));
+        controlPanel.setLayout(new GridLayout(1, 1));
+        controlPanel2.setLayout(new GridLayout(1, 1));
 
-            linkoutput = new JTextArea("Links with Keyword: ");
-            linkinput = new JTextArea("Link: ");
-            keywordinput = new JTextArea("Keyword: ");
-            controlPanel.add(linkinput);
-            controlPanel2.add(keywordinput);
-            mainFrame.add(controlPanel3);
-            mainFrame.add(linkoutputPanel);
-            linkoutputPanel.add(linkoutput);
-            controlPanel3.add(controlPanel);
-            controlPanel3.add(separator1);
-            controlPanel3.add(controlPanel2);
-            controlPanel3.add(separator2);
-            controlPanel3.add(startbutton);
+        linkoutput = new JTextArea("Links with Keyword: ");
+        linkinput = new JTextArea("Link: ");
+        keywordinput = new JTextArea("Keyword: ");
+        controlPanel.add(linkinput);
+        controlPanel2.add(keywordinput);
+        mainFrame.add(controlPanel3);
+        mainFrame.add(linkoutputPanel);
+        linkoutputPanel.add(linkoutput);
+        controlPanel3.add(controlPanel);
+        controlPanel3.add(separator1);
+        controlPanel3.add(controlPanel2);
+        controlPanel3.add(separator2);
+        controlPanel3.add(startbutton);
 
-            mainFrame.setVisible(true);
-            mainFrame.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent windowEvent) {
-                    System.exit(0);
-                }
-            });
+        mainFrame.setVisible(true);
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
 
-        }
+    }
+
     private static void showEventDemo() {
     }
 
@@ -104,8 +106,44 @@ public class Main implements ActionListener {
             String command = e.getActionCommand();
 
             if (command.equals("Start")) {
+                try {
+                    String userlink = linkinput.getText();
+                    String userKeyword = keywordinput.getText();
+                    URL url = new URL(userlink);
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(url.openStream())
+                    );
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.contains("href")) {
+                            int start = line.indexOf("href=") + 6;
+                            String link = line.substring(start);
+
+                            int end = link.indexOf("\"");
+                            if (end == -1) {
+                                end = link.indexOf("'");
+                            }
+                            if (end == -1) {
+                                end = link.indexOf("--");
+                                link = line.substring(start, start + end);
+                            } else {
+                                link = line.substring(start, start + end);
+                            }
+                            if (link.contains(userKeyword)) {
+                                System.out.println(start + "," + end);
+                                System.out.println(link);
+                                System.out.println(line.substring(start, start + end));
+                            }
+                        }
+                    }
+                    reader.close();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
                 System.out.println(keywordinput.getText());
             }
+
+
             else if (command.equals("Submit")) {
                 statusLabel.setText("Submit Button clicked.");
             }
@@ -113,6 +151,7 @@ public class Main implements ActionListener {
                 statusLabel.setText("Cancel Button clicked.");
             }
         }
+    }
     }
 
    // try {
@@ -154,5 +193,5 @@ public class Main implements ActionListener {
    // } catch (Exception ex) {
      //   System.out.println(ex);
     //}
-    }
+    
 
