@@ -109,7 +109,11 @@ public class Main implements ActionListener {
                 try {
                     String userlink = linkinput.getText();
                     String userKeyword = keywordinput.getText();
-                    URL url = new URL(userlink);
+                    int filteredstart = userlink.indexOf("https");
+                    String filteredlink = userlink.substring(filteredstart);
+                   // int filteredkeywordstart = userKeyword.indexOf(8);
+                    String filteredkeyword = userKeyword.substring(8);
+                    URL url = new URL(filteredlink);
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(url.openStream())
                     );
@@ -118,6 +122,7 @@ public class Main implements ActionListener {
                         if (line.contains("href")) {
                             int start = line.indexOf("href=") + 6;
                             String link = line.substring(start);
+                            System.out.println(link);
 
                             int end = link.indexOf("\"");
                             if (end == -1) {
@@ -125,14 +130,15 @@ public class Main implements ActionListener {
                             }
                             if (end == -1) {
                                 end = link.indexOf("--");
-                                link = line.substring(start, start + end);
-                            } else {
+                                //link = line.substring(start, start + end);
+                            }
+                            else {
                                 link = line.substring(start, start + end);
                             }
-                            if (link.contains(userKeyword)) {
+                            if (link.contains(filteredkeyword)) {
                                 System.out.println(start + "," + end);
                                 System.out.println(link);
-                                System.out.println(line.substring(start, start + end));
+                                //System.out.println(line.substring(start, start + end));
                             }
                         }
                     }
@@ -140,7 +146,7 @@ public class Main implements ActionListener {
                 } catch (Exception ex) {
                     System.out.println(ex);
                 }
-                System.out.println(keywordinput.getText());
+                //System.out.println(keywordinput.getText());
             }
 
 
