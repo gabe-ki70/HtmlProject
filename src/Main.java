@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JScrollPane;
 
 
 public class Main implements ActionListener {
@@ -67,8 +68,8 @@ public class Main implements ActionListener {
         controlPanel.add(linkinput);
         controlPanel2.add(keywordinput);
         mainFrame.add(controlPanel3);
-        mainFrame.add(linkoutputPanel);
-        linkoutputPanel.add(linkoutput);
+        JScrollPane scrollPane = new JScrollPane(linkoutput);
+        mainFrame.add(scrollPane);
         controlPanel3.add(controlPanel);
         controlPanel3.add(separator1);
         controlPanel3.add(controlPanel2);
@@ -112,7 +113,8 @@ public class Main implements ActionListener {
                     int filteredstart = userlink.indexOf("https");
                     String filteredlink = userlink.substring(filteredstart);
                    // int filteredkeywordstart = userKeyword.indexOf(8);
-                    String filteredkeyword = userKeyword.substring(8);
+                    String filteredkeyword = userKeyword.substring(9);
+                    System.out.println(filteredkeyword);
                     URL url = new URL(filteredlink);
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(url.openStream())
@@ -122,24 +124,49 @@ public class Main implements ActionListener {
                         if (line.contains("href")) {
                             int start = line.indexOf("href=") + 6;
                             String link = line.substring(start);
-                            System.out.println(link);
+                          //  System.out.println("og"+link);
 
                             int end = link.indexOf("\"");
-                            if (end == -1) {
-                                end = link.indexOf("'");
+                            int end2 = link.indexOf("'");
+                            if (end2 == -1){
+                                link = link.substring(0, end);
+                                if (link.contains(filteredkeyword)) {
+                                    System.out.println(start + "," + end);
+                                    System.out.println(link);
+                                    linkoutput.append(link+ "\n");
+                                    //System.out.println(line.substring(start, start + end));
+                                }
+                            } else  if (end == -1) {
+                               // end = link.indexOf("'");
+                                link = link.substring(0, end2);
+                                if (link.contains(filteredkeyword)) {
+                                    System.out.println(start + "," + end2);
+                                    System.out.println(link);
+                                    linkoutput.append(link+ "\n");
+                                    //System.out.println(line.substring(start, start + end));
+                                }
                             }
-                            if (end == -1) {
-                                end = link.indexOf("--");
+                           else if (end < end2) {
+                                //end = link.indexOf("--");
                                 //link = line.substring(start, start + end);
+                                link = link.substring(0, end);
+                                if (link.contains(filteredkeyword)) {
+                                    System.out.println(start + "," + end);
+                                    System.out.print(link + "\n");
+                                    linkoutput.append(link + "\n");
+                                    //System.out.println(line.substring(start, start + end));
+                                }
                             }
                             else {
-                                link = line.substring(start, start + end);
+                                link = link.substring(0, end2);
+                                if (link.contains(filteredkeyword)) {
+                                    System.out.println(start + "," + end2);
+                                    System.out.println(link);
+                                    linkoutput.append(link+ "\n");
+                                    //System.out.println(line.substring(start, start + end));
+                                }
                             }
-                            if (link.contains(filteredkeyword)) {
-                                System.out.println(start + "," + end);
-                                System.out.println(link);
-                                //System.out.println(line.substring(start, start + end));
-                            }
+
                         }
                     }
                     reader.close();
