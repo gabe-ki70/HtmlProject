@@ -21,6 +21,7 @@ public class Main implements ActionListener {
     private JPanel controlPanel2;
     private JPanel controlPanel3;
     private JPanel linkoutputPanel;
+    private JPanel buttonpanel;
     private JLabel statusLabel;
     private JLabel separator1;
     private JLabel separator2;
@@ -50,6 +51,7 @@ public class Main implements ActionListener {
         controlPanel = new JPanel();
         controlPanel2 = new JPanel();
         controlPanel3 = new JPanel();
+        buttonpanel = new JPanel();
         controlPanel3.setLayout(new GridLayout(5, 1));
         linkoutputPanel = new JPanel();
         separator1 = new JLabel("");
@@ -59,6 +61,11 @@ public class Main implements ActionListener {
         startbutton.setActionCommand("Start");
         startbutton.addActionListener(new Main.ButtonClickListener());
 
+        JButton resetbutton = new JButton("Reset");
+        resetbutton.setActionCommand("Reset");
+        resetbutton.addActionListener(new Main.ButtonClickListener());
+
+        buttonpanel.setLayout(new GridLayout(1, 2));
         controlPanel.setLayout(new GridLayout(1, 1));
         controlPanel2.setLayout(new GridLayout(1, 1));
 
@@ -74,7 +81,9 @@ public class Main implements ActionListener {
         controlPanel3.add(separator1);
         controlPanel3.add(controlPanel2);
         controlPanel3.add(separator2);
-        controlPanel3.add(startbutton);
+        controlPanel3.add(buttonpanel);
+        buttonpanel.add(startbutton);
+        buttonpanel.add(resetbutton);
 
         mainFrame.setVisible(true);
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -90,16 +99,6 @@ public class Main implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == cut)
-            ta.cut();
-        if (e.getSource() == paste)
-            ta.paste();
-        if (e.getSource() == copy)
-            ta.copy();
-        if (e.getSource() == selectAll)
-            ta.selectAll();
-
-
     }
 
     private class ButtonClickListener implements ActionListener {
@@ -174,6 +173,11 @@ public class Main implements ActionListener {
                     System.out.println(ex);
                 }
                 //System.out.println(keywordinput.getText());
+            }
+            else if (command.equals("Reset")){
+                linkinput.setText("Link: ");
+                keywordinput.setText("Keyword: ");
+                linkoutput.setText("Links with Keyword: ");
             }
 
 
