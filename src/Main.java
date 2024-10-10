@@ -171,6 +171,9 @@ public class Main implements ActionListener {
                     reader.close();
                 } catch (Exception ex) {
                     System.out.println(ex);
+                    System.out.println("Inputted link is not valid, please click reset and input another one");
+                    linkoutput.append("\n");
+                    linkoutput.append("Inputted link is not valid, please click reset and input another one");
                 }
                 //System.out.println(keywordinput.getText());
             }
